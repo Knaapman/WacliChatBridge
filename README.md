@@ -1,61 +1,88 @@
 # WacliChatBridge
 
-Een eenvoudige Windows-bridge tussen je eigen WhatsApp-account en ChatGPT.
+**Voor Windows. Geen technische installatie nodig.**
 
-De bridge gebruikt:
+WacliChatBridge koppelt je eigen WhatsApp aan ChatGPT. Je WhatsApp-database blijft lokaal op je laptop.
 
-- [wacli](https://github.com/openclaw/wacli) als lokale WhatsApp-client;
-- de officiële MCP Python SDK voor een lokale Streamable HTTP MCP-server;
-- de officiële OpenAI `tunnel-client` om die lokale MCP veilig beschikbaar te maken voor ChatGPT.
+## Start hier
 
-WhatsApp-data blijft lokaal op de laptop. De MCP-server luistert alleen op `127.0.0.1`.
+### 1. Download deze repository
 
-## Installeren
+Gebruik **Code > Download ZIP** en pak het ZIP-bestand uit.
 
-1. Clone of download deze repository.
-2. Dubbelklik `INSTALL.cmd`.
-3. De installer downloadt automatisch de actuele Windows x64-versies van WACLI, OpenAI `tunnel-client` en `uv`.
-4. Scan de WhatsApp-QR-code.
-5. Vul je OpenAI **Tunnel ID** (`tunnel_...`) in.
-6. Vul je **Runtime API key** in met minimaal **Tunnels Read + Use**. De invoer is verborgen.
-7. Klaar. De bridge start direct en voortaan automatisch bij Windows-login.
+### 2. Dubbelklik op `START-HERE.cmd`
 
-De runtime key wordt niet in Git opgeslagen. Windows versleutelt hem lokaal met DPAPI voor de huidige gebruiker.
+Daarna begeleidt de installer je stap voor stap.
 
-## Controleren
+Je hoeft alleen:
 
-Dubbelklik `STATUS.cmd`.
+1. een WhatsApp QR-code te scannen;
+2. je OpenAI Tunnel ID in te voeren;
+3. je OpenAI Runtime API key in te voeren.
 
-Daarmee controleer je:
+Heb je de Tunnel ID of API key nog niet? Druk tijdens de installatie gewoon op **ENTER**. De installer opent dan automatisch de juiste OpenAI-pagina.
+
+### 3. Klaar
+
+De installer controleert zelf:
+
+- of WhatsApp gekoppeld is;
+- of de lokale ChatGPT-bridge draait;
+- of de OpenAI-tunnel draait;
+- of de verbinding klaar is voor ChatGPT.
+
+Als alles goed staat, kan hij meteen de ChatGPT Connector-instellingen voor je openen.
+
+## Daarna hoef je niets meer te doen
+
+WacliChatBridge start voortaan automatisch wanneer je inlogt op Windows.
+
+Op je bureaublad komt een snelkoppeling **WacliChatBridge status** waarmee je altijd kunt controleren of alles werkt.
+
+Bij opnieuw uitvoeren van `START-HERE.cmd` worden bestaande WhatsApp- en tunnelinstellingen herkend en kun je die gewoon behouden.
+
+## Wat wordt automatisch geïnstalleerd?
+
+De installer haalt zelf de actuele Windows-versies op van:
 
 - WACLI;
-- de lokale MCP;
-- de OpenAI tunnel;
-- of de tunnel voor ChatGPT `ready` is.
+- OpenAI `tunnel-client`;
+- `uv` en een lokale Python-runtime;
+- de MCP-dependencies.
+
+Je hoeft deze onderdelen niet zelf te installeren.
+
+## Als iets niet werkt
+
+Voer eerst opnieuw `START-HERE.cmd` uit. Bestaande gegevens blijven behouden.
+
+Je kunt ook:
+
+- dubbelklikken op `STATUS.cmd`;
+- de snelkoppeling **WacliChatBridge status** op je bureaublad gebruiken;
+- logs bekijken in `%LOCALAPPDATA%\WacliChatBridge\logs`.
 
 ## Verwijderen
 
-Dubbelklik `UNINSTALL.cmd`.
+Dubbelklik op `UNINSTALL.cmd`.
 
-De lokale runtime-map wordt niet hard verwijderd, maar als backup onder `%LOCALAPPDATA%` bewaard.
+De lokale gegevens worden niet direct weggegooid. De installer bewaart eerst een backup onder `%LOCALAPPDATA%`.
 
-## Wat draait er lokaal?
+## Voor beheerders
 
-Na installatie staat alles onder:
+WacliChatBridge gebruikt:
 
-```text
-%LOCALAPPDATA%\WacliChatBridge\
-```
+- WACLI voor de lokale WhatsApp-mirror;
+- de officiële MCP Python SDK voor Streamable HTTP op `127.0.0.1:8787/mcp`;
+- OpenAI Secure MCP Tunnel voor de verbinding met ChatGPT;
+- een OpenAI Runtime API key met uitsluitend **Tunnels Read + Use**;
+- Windows DPAPI voor lokale versleuteling van die runtime key.
 
-De installer start één verborgen supervisor die automatisch deze drie processen bewaakt en opnieuw start wanneer nodig:
+De MCP-server bindt alleen op loopback. WhatsApp-data, tokens en secrets worden niet naar Git gecommit.
 
-- `wacli sync --follow --presence-mode quiet`;
-- de MCP-server op `http://127.0.0.1:8787/mcp`;
-- OpenAI `tunnel-client`.
+WACLI gebruikt het WhatsApp Web-protocol en is geen officieel Meta-product.
 
-Autostart gebeurt via Windows Task Scheduler. Als dat op de laptop niet is toegestaan, valt de installer terug op de Windows Startup-folder.
-
-## MCP-tools
+## Beschikbare MCP-tools
 
 - `wacli_doctor`
 - `wacli_chats_list`
@@ -65,16 +92,6 @@ Autostart gebeurt via Windows Task Scheduler. Als dat op de laptop niet is toege
 - `wacli_history_backfill`
 - `wacli_send_text`
 
-De leesfuncties draaien in WACLI read-only mode. `wacli_send_text` is een expliciete externe write-actie.
+De leesfuncties draaien read-only. `wacli_send_text` is een expliciete externe write-actie.
 
-## Security
-
-- MCP bindt uitsluitend aan loopback (`127.0.0.1`).
-- Alleen de OpenAI Secure MCP Tunnel maakt de lokale MCP bereikbaar voor ChatGPT.
-- De runtime key wordt DPAPI-versleuteld opgeslagen.
-- WhatsApp-store, tokens en secrets worden niet gecommit.
-- WACLI gebruikt het WhatsApp Web-protocol en is geen officieel Meta-product.
-
-## Eerste praktijktest
-
-De Python-code is syntactisch gecontroleerd en de implementatie volgt de actuele MCP v2- en OpenAI tunnel-client interfaces. De echte Windows-installatie moet nog één keer op een schone Windows-machine worden gesmoked, omdat deze werkomgeving geen Windows/PowerShell-runtime heeft.
+> De installer is ontworpen voor Windows x64. De eerste echte end-to-end smoke test moet nog op een schone Windows-laptop worden uitgevoerd.
