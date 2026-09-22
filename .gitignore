@@ -1,0 +1,21 @@
+# Local configuration and secrets
+.env
+*.key
+*.secret
+config.json
+secrets/
+
+# Runtime state
+.venv/
+__pycache__/
+*.pyc
+logs/
+pids/
+data/
+bin/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
