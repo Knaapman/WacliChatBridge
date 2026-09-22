@@ -1,0 +1,12 @@
+<evaluations>
+  <evaluation><question>Controleer of WACLI gezond is en toon daarna de vijf meest recente chats.</question><expected_tools>wacli_doctor,wacli_chats_list</expected_tools></evaluation>
+  <evaluation><question>Zoek recente WhatsApp-berichten over een demo en geef per relevante chat de context.</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Welke chats bevatten recente berichten over support en wat is de laatste status per chat?</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Zoek berichten met het woord feedback en lees de omliggende context van de relevante chats.</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Vind recente verwijzingen naar een klantnaam en bepaal in welke chats die voorkomt.</question><expected_tools>wacli_messages_search,wacli_chats_list,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Zoek berichten van een specifieke afzender over een afspraak en lees de chatcontext.</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Welke gesprekken bevatten het woord ticket en wat werd als laatste afgesproken?</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Controleer WACLI en onderzoek daarna of er recent berichten over een storing zijn binnengekomen.</question><expected_tools>wacli_doctor,wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Zoek recente berichten over onboarding en vat de laatste afspraken per chat samen.</question><expected_tools>wacli_messages_search,wacli_messages_list</expected_tools></evaluation>
+  <evaluation><question>Welke drie chats waren het meest recent actief en wat was per chat het laatste onderwerp?</question><expected_tools>wacli_chats_list,wacli_messages_list</expected_tools></evaluation>
+</evaluations>
