@@ -1,88 +1,35 @@
 # WacliChatBridge
 
-**Voor Windows. Geen technische installatie nodig.**
+WacliChatBridge koppelt een lokale WACLI/WhatsApp-store aan ChatGPT via OpenAI Secure MCP Tunnel.
 
-WacliChatBridge koppelt je eigen WhatsApp aan ChatGPT. Je WhatsApp-database blijft lokaal op je laptop.
+## Belangrijk: source-only repository
 
-## Start hier
+Deze repository is bewust **source-only** gemaakt.
 
-### 1. Download deze repository
+Er staan dus geen:
 
-Gebruik **Code > Download ZIP** en pak het ZIP-bestand uit.
+- gedownloade executables;
+- `.cmd` installers;
+- PowerShell downloaders;
+- proces-kill scripts;
+- verborgen autostartprocessen;
+- API-keys of WhatsApp-data
 
-### 2. Dubbelklik op `START-HERE.cmd`
+in de repository.
 
-Daarna begeleidt de installer je stap voor stap.
+Dat maakt de GitHub-download transparanter en verkleint de kans dat browser- of endpointbeveiliging de ZIP als verdacht markeert.
 
-Je hoeft alleen:
+## Installeren
 
-1. een WhatsApp QR-code te scannen;
-2. je OpenAI Tunnel ID in te voeren;
-3. je OpenAI Runtime API key in te voeren.
+Volg [SETUP.md](SETUP.md).
 
-Heb je de Tunnel ID of API key nog niet? Druk tijdens de installatie gewoon op **ENTER**. De installer opent dan automatisch de juiste OpenAI-pagina.
-
-### 3. Klaar
-
-De installer controleert zelf:
-
-- of WhatsApp gekoppeld is;
-- of de lokale ChatGPT-bridge draait;
-- of de OpenAI-tunnel draait;
-- of de verbinding klaar is voor ChatGPT.
-
-Als alles goed staat, kan hij meteen de ChatGPT Connector-instellingen voor je openen.
-
-## Daarna hoef je niets meer te doen
-
-WacliChatBridge start voortaan automatisch wanneer je inlogt op Windows.
-
-Op je bureaublad komt een snelkoppeling **WacliChatBridge status** waarmee je altijd kunt controleren of alles werkt.
-
-Bij opnieuw uitvoeren van `START-HERE.cmd` worden bestaande WhatsApp- en tunnelinstellingen herkend en kun je die gewoon behouden.
-
-## Wat wordt automatisch geïnstalleerd?
-
-De installer haalt zelf de actuele Windows-versies op van:
+De setup gebruikt alleen officiële downloads van:
 
 - WACLI;
 - OpenAI `tunnel-client`;
-- `uv` en een lokale Python-runtime;
-- de MCP-dependencies.
+- Astral `uv`.
 
-Je hoeft deze onderdelen niet zelf te installeren.
-
-## Als iets niet werkt
-
-Voer eerst opnieuw `START-HERE.cmd` uit. Bestaande gegevens blijven behouden.
-
-Je kunt ook:
-
-- dubbelklikken op `STATUS.cmd`;
-- de snelkoppeling **WacliChatBridge status** op je bureaublad gebruiken;
-- logs bekijken in `%LOCALAPPDATA%\WacliChatBridge\logs`.
-
-## Verwijderen
-
-Dubbelklik op `UNINSTALL.cmd`.
-
-De lokale gegevens worden niet direct weggegooid. De installer bewaart eerst een backup onder `%LOCALAPPDATA%`.
-
-## Voor beheerders
-
-WacliChatBridge gebruikt:
-
-- WACLI voor de lokale WhatsApp-mirror;
-- de officiële MCP Python SDK voor Streamable HTTP op `127.0.0.1:8787/mcp`;
-- OpenAI Secure MCP Tunnel voor de verbinding met ChatGPT;
-- een OpenAI Runtime API key met uitsluitend **Tunnels Read + Use**;
-- Windows DPAPI voor lokale versleuteling van die runtime key.
-
-De MCP-server bindt alleen op loopback. WhatsApp-data, tokens en secrets worden niet naar Git gecommit.
-
-WACLI gebruikt het WhatsApp Web-protocol en is geen officieel Meta-product.
-
-## Beschikbare MCP-tools
+## MCP-tools
 
 - `wacli_doctor`
 - `wacli_chats_list`
@@ -92,6 +39,28 @@ WACLI gebruikt het WhatsApp Web-protocol en is geen officieel Meta-product.
 - `wacli_history_backfill`
 - `wacli_send_text`
 
-De leesfuncties draaien read-only. `wacli_send_text` is een expliciete externe write-actie.
+Leesacties gebruiken de lokale WACLI-store. `wacli_send_text` is een externe write-actie.
 
-> De installer is ontworpen voor Windows x64. De eerste echte end-to-end smoke test moet nog op een schone Windows-laptop worden uitgevoerd.
+## Architectuur
+
+```text
+ChatGPT
+   |
+OpenAI Secure MCP Tunnel
+   |
+tunnel-client op de laptop
+   |
+127.0.0.1:8787/mcp
+   |
+WacliChatBridge
+   |
+lokale WACLI-store
+   |
+WhatsApp Web
+```
+
+De lokale MCP bindt alleen op loopback. Secrets en WhatsApp-data horen nooit in Git.
+
+## Antivirus
+
+Als een eerdere ZIP-download als verdacht werd geblokkeerd, gebruik dan de actuele `main` branch. De eerdere automatische installer is verwijderd uit de huidige repository.
