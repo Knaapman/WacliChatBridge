@@ -1,0 +1,11 @@
+[project]
+name = "wacli-chat-bridge"
+version = "0.1.0"
+description = "Local WACLI MCP bridge for ChatGPT through OpenAI Secure MCP Tunnel"
+requires-python = ">=3.11"
+dependencies = [
+  "mcp>=2.0,<3",
+]
+
+[tool.uv]
+package = false
